@@ -1,0 +1,17 @@
+{
+  "short_name": "ShieldShadow",
+  "name": "Shield & Shadow - Dungeon Game",
+  "icons": [
+    {
+      "src": "./icon.png",
+      "type": "image/png",
+      "sizes": "64x64 32x32 24x24 16x16512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#08080a",
+  "theme_color": "#08080a",
+  "display": "standalone",
+  "orientation": "portrait"
+}

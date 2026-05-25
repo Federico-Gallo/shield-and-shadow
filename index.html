@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+  <title>Shield & Shadow - Dungeon Card Game</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="manifest" href="manifest.json">
+  <!-- Color de la barra de estado en iPhone -->
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+
+<body>
+  <!-- PANTALLA DEL MENÚ PRINCIPAL -->
+  <div id="main-menu" class="menu-overlay">
+    <div class="menu-content">
+      <h1>🛡️ Shield & Shadow 🔮</h1>
+      <p class="menu-subtitle">Dungeon Card Game</p>
+
+      <div class="menu-buttons">
+        <button id="btn-start-game" class="btn btn-primary">⚔️ Entrar a la Mazmorra</button>
+        <button id="btn-how-to" class="btn btn-secondary">📜 Cómo Jugar</button>
+        <button id="btn-credits" class="btn btn-secondary">👥 Créditos</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL DE AYUDA (OCULTO POR DEFECTO) -->
+  <div id="help-panel" class="menu-overlay" style="display: none;">
+    <div class="menu-content help-content">
+      <h2>📜 Registro de la Mazmorra</h2>
+      <div class="help-scroll">
+        <p><strong>Objetivo:</strong> Agota las 52 cartas del mazo y sobrevive.</p>
+        <p><strong>Mecánica:</strong> Avanza tocando obligatoriamente la carta de la <strong>Vanguardia</strong>
+          (izquierda). Puedes esquivarla usando el botón de saltar (-1 ❤️).</p>
+        <hr>
+        <div class="help-item"><span>👹</span>
+          <p><strong>Monstruo:</strong> Daño físico. Reduce primero tu 🛡️ Escudo y luego tu ❤️ Vida.</p>
+        </div>
+        <div class="help-item"><span>🔮</span>
+          <p><strong>Hechicero:</strong> Daño mágico. <strong>Ignora el escudo</strong>, golpea directo a tu ❤️ Vida.
+          </p>
+        </div>
+        <div class="help-item"><span>⚔️</span>
+          <p><strong>Arma:</strong> Recarga tus puntos de ⚔️ Ataque hasta un máximo de 15.</p>
+        </div>
+        <div class="help-item"><span>🛡️</span>
+          <p><strong>Escudo:</strong> Repara tus puntos de 🛡️ Escudo hasta un máximo de 15.</p>
+        </div>
+        <div class="help-item"><span>🧪</span>
+          <p><strong>Poción:</strong> Sana tus puntos de ❤️ Vida (máximo 20).</p>
+        </div>
+        <hr>
+        <p><strong>Combate:</strong> Al tocar un enemigo (👹/🔮), usas tu ⚔️ Ataque disponible. Si el nivel del enemigo
+          es mayor, sufres la diferencia como daño.</p>
+        <p><strong>🔥 Sistema de Combo:</strong> Derrotar enemigos seguidos multiplica los puntos ganados. Recoger
+          equipo (⚔️/🛡️), curarte (🧪) o saltar cartas romperá tu racha devolviendo el combo a x1.</p>
+      </div>
+      <button id="btn-close-help" class="btn btn-danger">Volver al Menú</button>
+    </div>
+  </div>
+  <!-- NUEVO PANEL DE CRÉDITOS (OCULTO POR DEFECTO) -->
+  <div id="credits-panel" class="menu-overlay" style="display: none;">
+    <div class="menu-content">
+      <h2>👥 Créditos del Proyecto</h2>
+      <div class="credits-body"
+        style="text-align: left; margin: 20px 0; color: #d4d4d8; font-size: 0.95rem; line-height: 1.6;">
+        <p><strong>Desarrollo y Código:</strong><br><span style="color: #fff;">Federico Gallo / Charras - Cordoba -
+            2026</span></p>
+        <p><strong>Diseño de Juego Original:</strong><br>Inspirado en las mecánicas de <em>Scoundrel</em> (2011) de
+          <span style="color: #fff;">Zach Gage y Kurt Bieg</span>.
+        </p>
+        <p><strong>Tecnología:</strong><br>Desarrollado íntegramente con HTML5, CSS3 Moderno y JavaScript Vanilla (Web
+          Audio API).</p>
+      </div>
+      <button id="btn-close-credits" class="btn btn-danger">Volver</button>
+    </div>
+  </div>
+
+  <div class="game-container" id="game-zone" style="display: none;">
+    <header>
+      <h1>🛡️ Shield & Shadow 🔮</h1>
+      <p>Avanza por la fila. Enfrenta el peligro.</p>
+    </header>
+
+    <div class="stats-panel">
+      <!-- Primera fila: Supervivencia -->
+      <div class="stats-row survival-row">
+        <div class="stat-box hp">
+          <span class="stat-label">❤️ Vida</span>
+          <span id="stat-hp" class="stat-value">20</span>
+          <div class="bar-container">
+            <div id="bar-hp" class="bar"></div>
+          </div>
+        </div>
+        <div class="stat-box shield">
+          <span class="stat-label">🛡️ Escudo</span>
+          <span id="stat-shield" class="stat-value">5</span>
+          <div class="bar-container">
+            <div id="bar-shield" class="bar"></div>
+          </div>
+        </div>
+        <div class="stat-box deck">
+          <span class="stat-label">🎴 Mazo</span>
+          <span id="stat-deck" class="stat-value">52</span>
+        </div>
+      </div>
+
+      <!-- Segunda fila: Progreso y Combate -->
+      <div class="stats-row combat-row">
+        <div class="stat-box atk">
+          <span class="stat-label">⚔️ Ataque</span>
+          <span id="stat-atk" class="stat-value">5</span>
+        </div>
+        <div class="stat-box combo">
+          <span class="stat-label">🔥 Combo</span>
+          <span id="stat-combo" class="stat-value">x1</span>
+        </div>
+        <div class="stat-box score">
+          <span class="stat-label">✨ Puntos</span>
+          <span id="stat-score" class="stat-value">0</span>
+        </div>
+        <div class="stat-box high-score">
+          <span class="stat-label">🏆 Récord</span>
+          <span id="stat-high-score" class="stat-value">0</span>
+        </div>
+      </div>
+    </div>
+
+
+    <main class="dungeon-row" id="dungeon-row">
+      <!-- Las cartas se inyectan con JavaScript -->
+    </main>
+
+    <div class="controls">
+      <button id="btn-skip" class="btn btn-secondary">🔀 Saltar Vanguardia (-1 ❤️)</button>
+      <button id="btn-restart" class="btn btn-danger" style="display: none;">🔄 Jugar de Nuevo</button>
+    </div>
+
+    <div id="overlay" class="overlay" style="display: none;">
+      <div class="overlay-content">
+        <h2 id="overlay-title">¡Fin del Juego!</h2>
+        <p id="overlay-message">Te has quedado sin puntos de vida.</p>
+        <button id="btn-revive" class="btn btn-primary"
+          style="background: #f59e0b; color: #000; margin-bottom: 10px; display: none;">📺 Revivir (+5 ❤️)</button>
+        <button id="btn-modal-restart" class="btn btn-primary">Intentarlo de Nuevo</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+
+</html>
