@@ -538,3 +538,45 @@ header p {
 .credits-body p:last-child {
   border: none;
 }
+
+/* Estilo del botón selector de idioma */
+.language-selector {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 30;
+}
+
+.btn-lang {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-lang:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #a1a1aa;
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+}
+
+#btn-to-menu,
+#btn-restart {
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  /* Evita que el botón se deforme */
+}

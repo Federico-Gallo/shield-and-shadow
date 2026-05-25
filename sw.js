@@ -1,4 +1,4 @@
-const CACHE_NAME = 'shield-shadow-v1';
+const CACHE_NAME = 'shield-shadow-v2';
 const ASSETS = [
   './',
   './index.html',

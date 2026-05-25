@@ -6,6 +6,97 @@ const CARD_TYPES = {
   WEAPON: { type: 'weapon', emoji: '⚔️', label: 'Arma' } // <-- NUEVA CARTA
 };
 
+const LANGUAGES = {
+  es: {
+    boardSub: "Avanza por la fila. Enfrenta el peligro.",
+    btnLang: "🌐 ES",
+    start: "⚔️ Entrar a la Mazmorra",
+    howTo: "📜 Cómo Jugar",
+    credits: "👥 Créditos",
+    sub: "Dungeon Card Game",
+    vida: "❤️ Vida",
+    escudo: "🛡️ Escudo",
+    mazo: "🎴 Mazo",
+    ataque: "⚔️ Ataque",
+    combo: "🔥 Combo",
+    puntos: "✨ Puntos",
+    record: "🏆 Récord",
+    skip: "🔀 Saltar Vanguardia (-1 ❤️)",
+    restart: "🔄 Jugar de Nuevo",
+    labelMonster: "Monstruo",
+    labelMage: "Hechicero",
+    labelShield: "Escudo",
+    labelPotion: "Poción",
+    labelWeapon: "Arma",
+    helpTitle: "📜 Registro de la Mazmorra",
+    helpClose: "Volver al Menú",
+    overlayWin: "🏆 ¡VICTORIA!",
+    overlayLose: "☠️ ¡HAS CAÍDO!",
+    msgWin: "¡Sobreviviste a la mazmorra!",
+    msgLose: "Los peligros pudieron contigo.",
+    finalScore: "Puntuación Final",
+    newRecord: "🔥 ¡NUEVO RÉCORD MÁXIMO! 🔥",
+    credTitle: "👥 Créditos del Proyecto",
+    credDev: "Desarrollo y Código:",
+    credOrig: "Diseño de Juego Original:",
+    credTech: "Tecnología:",
+    credClose: "Volver",
+    helpObjective: "<strong>Objetivo:</strong> Agota las 52 cartas del mazo y sobrevive.",
+    helpMechanic: "<strong>Mecánica:</strong> Avanza tocando obligatoriamente la carta de la <strong>Vanguardia</strong> (izquierda). Puedes esquivarla usando el botón de saltar (-1 ❤️).",
+    helpMonster: "<strong>Monstruo:</strong> Daño físico. Reduce primero tu 🛡️ Escudo y luego tu ❤️ Vida.",
+    helpMage: "<strong>Hechicero:</strong> Daño mágico. <strong>Ignora el escudo</strong>, golpea directo a tu ❤️ Vida.",
+    helpWeapon: "<strong>Arma:</strong> Recarga tus puntos de ⚔️ Ataque hasta un máximo de 15.",
+    helpShield: "<strong>Escudo:</strong> Repara tus puntos de 🛡️ Escudo hasta un máximo de 15.",
+    helpPotion: "<strong>Poción:</strong> Sana tus puntos de ❤️ Vida (máximo 20).",
+    helpCombat: "<strong>Combate:</strong> Al tocar un enemigo (👹/🔮), usas tu ⚔️ Ataque disponible. Si el nivel del enemigo es mayor, sufres la diferencia como daño.",
+    helpComboText: "<strong>🔥 Sistema de Combo:</strong> Derrotar enemigos seguidos multiplica los puntos ganados. Recoger equipo (⚔️/🛡️), curarte (🧪) o saltar cartas romperá tu racha devolviendo el combo a x1."
+  },
+  en: {
+    boardSub: "Advance through the row. Face the danger.",
+    btnLang: "🌐 EN",
+    start: "⚔️ Enter the Dungeon",
+    howTo: "📜 How to Play",
+    credits: "👥 Credits",
+    sub: "Dungeon Card Game",
+    vida: "❤️ Health",
+    escudo: "🛡️ Shield",
+    mazo: "🎴 Deck",
+    ataque: "⚔️ Attack",
+    combo: "🔥 Combo",
+    puntos: "✨ Score",
+    record: "🏆 Record",
+    skip: "🔀 Skip Vanguard (-1 ❤️)",
+    restart: "🔄 Play Again",
+    labelMonster: "Monster",
+    labelMage: "Mage",
+    labelShield: "Shield",
+    labelPotion: "Potion",
+    labelWeapon: "Weapon",
+    helpTitle: "📜 Dungeon Ledger",
+    helpClose: "Back to Menu",
+    overlayWin: "🏆 VICTORY!",
+    overlayLose: "☠️ YOU DIED!",
+    msgWin: "You survived the dungeon!",
+    msgLose: "The dungeon dangers defeated you.",
+    finalScore: "Final Score",
+    newRecord: "🔥 NEW HIGH SCORE! 🔥",
+    credTitle: "👥 Project Credits",
+    credDev: "Development & Code:",
+    credOrig: "Original Game Design:",
+    credTech: "Technology:",
+    credClose: "Back",
+    helpObjective: "<strong>Objective:</strong> Empty all 52 cards from the deck and survive.",
+    helpMechanic: "<strong>Mechanics:</strong> Advance by clicking the <strong>Vanguard</strong> card (left). You can dodge it using the skip button (-1 ❤️).",
+    helpMonster: "<strong>Monster:</strong> Physical damage. Reduces your 🛡️ Shield first, then your ❤️ Health.",
+    helpMage: "<strong>Mage:</strong> Magic damage. <strong>Ignores shield</strong>, hits your ❤️ Health directly.",
+    helpWeapon: "<strong>Weapon:</strong> Reloads your ⚔️ Attack points up to a maximum of 15.",
+    helpShield: "<strong>Shield:</strong> Repairs your 🛡️ Shield points up to a maximum of 15.",
+    helpPotion: "<strong>Potion:</strong> Heals your ❤️ Health points (max 20).",
+    helpCombat: "<strong>Combat:</strong> When touching an enemy (👹/🔮), you use your available ⚔️ Attack. If the enemy level is higher, you take the difference as damage.",
+    helpComboText: "<strong>🔥 Combo System:</strong> Defeating enemies consecutively multiplies points earned. Gathering gear (⚔️/🛡️), healing (🧪), or skipping cards breaks your streak resetting combo to x1."
+  }
+};
+
 let gameState = {
   deck: [],
   dungeonRow: [],
@@ -14,7 +105,8 @@ let gameState = {
   score: 0,
   combo: 1,
   highScore: 0, // <-- NUEVO: Agrega esta línea para evitar el error
-  hasRevived: false // <-- NUEVO: Control de resurrección
+  hasRevived: false,
+  lang: navigator.language.startsWith('en') ? 'en' : 'es'
 };
 
 let audioCtx = null;
@@ -63,6 +155,31 @@ function playSound(type) {
 document.addEventListener('DOMContentLoaded', () => {
   // Cargar el récord guardado antes de iniciar
   gameState.highScore = parseInt(localStorage.getItem('dungeon_highscore')) || 0;
+
+  // NUEVO: Evento para regresar al menú principal desde la partida
+  const btnToMenu = document.getElementById('btn-to-menu');
+  if (btnToMenu) {
+    btnToMenu.addEventListener('click', () => {
+      playSound('click');
+      const mainMenu = document.getElementById('main-menu');
+      const gameZone = document.getElementById('game-zone');
+      if (mainMenu) mainMenu.style.display = 'flex';
+      if (gameZone) gameZone.style.display = 'none';
+    });
+  }
+
+
+  // Inserta esto dentro de DOMContentLoaded
+  const btnLang = document.getElementById('btn-lang');
+  if (btnLang) {
+    btnLang.addEventListener('click', () => {
+      playSound('click');
+      // Alternar idioma
+      gameState.lang = (gameState.lang === 'es') ? 'en' : 'es';
+      translateUI();
+    });
+  }
+
 
   // Abrir Créditos
   const btnCredits = document.getElementById('btn-credits');
@@ -142,7 +259,7 @@ function initGame() {
   document.getElementById('game-zone').style.display = 'block';
 
   document.getElementById('overlay').style.display = 'none';
-  document.getElementById('btn-restart').style.display = 'none';
+  //document.getElementById('btn-restart').style.display = 'none';
   document.getElementById('btn-skip').style.display = 'block';
   render();
 }
@@ -349,16 +466,93 @@ function render() {
     cardEl.className = 'card draw-anim';
     if (index === 0) cardEl.classList.add('vanguard');
     cardEl.setAttribute('data-type', card.type);
-    cardEl.innerHTML = `<div class="card-value">${card.value}</div><div class="card-emoji">${card.emoji}</div><div class="card-title">${card.label}</div>`;
+
+    // NUEVO: Traducir dinámicamente el tipo de carta en la mesa
+    const t = LANGUAGES[gameState.lang];
+    let currentLabel = t.labelMonster;
+    if (card.type === 'mage') currentLabel = t.labelMage;
+    if (card.type === 'shield') currentLabel = t.labelShield;
+    if (card.type === 'potion') currentLabel = t.labelPotion;
+    if (card.type === 'weapon') currentLabel = t.labelWeapon;
+
+    // Ocultar si es la vanguardia (para que no pise la etiqueta inferior)
+    const tituloCarta = (index === 0) ? '' : currentLabel;
+
+    cardEl.innerHTML = `
+            <div class="card-value">${card.value}</div>
+            <div class="card-emoji">${card.emoji}</div>
+            <div class="card-title">${tituloCarta}</div>
+        `;
+
     cardEl.addEventListener('click', () => handleCardClick(index));
     container.appendChild(cardEl);
   });
+
 }
 // Registrar el Service Worker de la PWA de forma segura
 if ('service worker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js')
+    navigator.serviceWorker.register('./sw.js')
       .then(reg => console.log('PWA: ¡Service Worker registrado con éxito!', reg))
       .catch(err => console.log('PWA: Error al registrar el Service Worker', err));
   });
+}
+
+function translateUI() {
+  const t = LANGUAGES[gameState.lang];
+  const boardSubElement = document.querySelector('header p');
+  if (boardSubElement) {
+    boardSubElement.innerText = t.boardSub;
+  }
+  // Textos del Menú Principal
+  document.getElementById('btn-lang').innerText = t.btnLang;
+  document.getElementById('btn-start-game').innerText = t.start;
+  document.getElementById('btn-how-to').innerText = t.howTo;
+  document.getElementById('btn-credits').innerText = t.credits;
+
+  // Actualizar etiquetas estáticas del juego
+  document.querySelector('.hp .stat-label').innerHTML = t.vida;
+  document.querySelector('.shield .stat-label').innerHTML = t.escudo;
+  document.querySelector('.deck .stat-label').innerHTML = t.mazo;
+  document.querySelector('.atk .stat-label').innerHTML = t.ataque;
+  document.querySelector('.combo .stat-label').innerHTML = t.combo;
+  document.querySelector('.score .stat-label').innerHTML = t.puntos;
+  document.querySelector('.high-score .stat-label').innerHTML = t.record;
+  document.getElementById('btn-skip').innerText = t.skip;
+
+  // Traducir Paneles de Ayuda y Créditos
+  document.querySelector('#help-panel h2').innerText = t.helpTitle;
+  document.getElementById('btn-close-help').innerText = t.helpClose;
+  document.querySelector('#credits-panel h2').innerText = t.credTitle;
+  document.getElementById('btn-close-credits').innerText = t.credClose;
+
+  // Contenido HTML interno de la Ayuda
+  const scrollBox = document.querySelector('.help-scroll');
+  if (scrollBox) {
+    scrollBox.innerHTML = `
+            <p>${t.helpObjective}</p>
+            <p>${t.helpMechanic}</p>
+            <hr>
+            <div class="help-item"><span>👹</span> <p>${t.helpMonster}</p></div>
+            <div class="help-item"><span>🔮</span> <p>${t.helpMage}</p></div>
+            <div class="help-item"><span>⚔️</span> <p>${t.helpWeapon}</p></div>
+            <div class="help-item"><span>🛡️</span> <p>${t.helpShield}</p></div>
+            <div class="help-item"><span>🧪</span> <p>${t.helpPotion}</p></div>
+            <hr>
+            <p>${t.helpCombat}</p>
+            <p>${t.helpComboText}</p>
+        `;
+  }
+
+  // Contenido HTML interno de los Créditos
+  // CORRECCIÓN: Traducción exacta para los créditos de Federico Gallo
+  const credBox = document.querySelector('.credits-body');
+  if (credBox) {
+    credBox.innerHTML = `
+            <p><strong>${t.credDev}</strong><br><span style="color: #fff;">Federico Gallo / Charras - Cordoba - Argentina - 2026</span></p>
+            <p><strong>${t.credOrig}</strong><br>${gameState.lang === 'es' ? 'Inspirado en las mecánicas de' : 'Inspired by the mechanics of'} <em>Scoundrel</em> (2011) de <span style="color: #fff;">Zach Gage y Kurt Bieg</span>.</p>
+            <p><strong>${t.credTech}</strong><br>${gameState.lang === 'es' ? 'Desarrollado íntegramente con HTML5, CSS3 Moderno y JavaScript Vanilla (Web Audio API).' : 'Fully developed with HTML5, Modern CSS3, and Vanilla JavaScript (Web Audio API).'}</p>
+        `;
+  }
+
 }
