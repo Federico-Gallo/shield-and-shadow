@@ -357,7 +357,7 @@ function render() {
 // Registrar el Service Worker de la PWA de forma segura
 if ('service worker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js')
+    navigator.serviceWorker.register('sw.js')
       .then(reg => console.log('PWA: ¡Service Worker registrado con éxito!', reg))
       .catch(err => console.log('PWA: Error al registrar el Service Worker', err));
   });
